@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "strict": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "skipLibCheck": true
+  },
+  "include": [
+    "**/*.ts",
+    "eslint.config.mjs"
+  ],
+  "exclude": [
+    "build",
+    "dist"
+  ]
+}
