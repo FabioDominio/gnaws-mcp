@@ -11,7 +11,7 @@ if (existsSync(".env")) {
 
 import type {AwsCredentialIdentityProvider} from "@aws-sdk/types";
 import {fromIni} from "@aws-sdk/credential-providers";
-import {Inventory, GraphBuilder, MarkdownExporter, GexfExporter, JsonExporter, LiveServiceFactory, CacheServiceFactory, CacheWriter, UnusedDetector} from "@gnaws/core";
+import {Inventory, GraphBuilder, MarkdownExporter, CsvExporter, GexfExporter, JsonExporter, LiveServiceFactory, CacheServiceFactory, CacheWriter, UnusedDetector} from "@gnaws/core";
 import type {DirectedGraph} from "graphology";
 import {McpServer} from "@modelcontextprotocol/server";
 import {StdioServerTransport} from "@modelcontextprotocol/server/stdio";
@@ -504,15 +504,16 @@ server.registerTool(
     "export",
     {
         "title": "Export Graph",
-        "description": "Export the resource graph to a file. Requires 'scan' or 'load' to be called first. Supported formats: gexf (Gephi), json (sigma.js viewer), md (markdown report).",
+        "description": "Export the resource graph to a file. Requires 'scan' or 'load' to be called first. Supported formats: gexf (Gephi), json (sigma.js viewer), md (markdown report), csv (flat inventory sheet).",
         "inputSchema": z.object({
             "format": z.enum([
                 "gexf",
                 "json",
-                "md"
-            ]).describe("Export format: 'gexf' for Gephi, 'json' for sigma.js viewer, 'md' for markdown report"),
+                "md",
+                "csv"
+            ]).describe("Export format: 'gexf' for Gephi, 'json' for sigma.js viewer, 'md' for markdown report, 'csv' for a flat inventory sheet"),
             "path": z.string().optional().
-                describe("Output file path. Defaults to graph.gexf, graph.json, or report.md")
+                describe("Output file path. Defaults to graph.gexf, graph.json, report.md, or inventory.csv")
         })
     },
     ({format, path}) => {
@@ -536,9 +537,11 @@ server.registerTool(
             const ext = format === "md"
                 ? ".md"
                 : `.${format}`;
-            const defaultName = format === "md"
-                ? "report.md"
-                : `graph.${format}`;
+            const defaultNames = {"gexf": "graph.gexf",
+                "json": "graph.json",
+                "md": "report.md",
+                "csv": "inventory.csv"};
+            const defaultName = defaultNames[format];
             let outputPath = path ?? defaultName;
             if (!outputPath.endsWith(ext)) {
 
@@ -557,6 +560,14 @@ server.registerTool(
             } else if (format === "json") {
 
                 new JsonExporter().export(
+                    outputPath,
+                    inventory,
+                    graph
+                );
+
+            } else if (format === "csv") {
+
+                new CsvExporter().export(
                     outputPath,
                     inventory,
                     graph
