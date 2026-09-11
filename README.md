@@ -98,7 +98,7 @@ Add to `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
 | `scan` | Scan AWS resources live with a profile | AWS credentials |
 | `load` | Load from a dump directory (offline) | Dump path |
 | `detect` | Find unused/orphaned resources | `scan` or `load` |
-| `export` | Export graph to gexf/json/md | `scan` or `load` |
+| `export` | Export graph to gexf/json/md/csv | `scan` or `load` |
 | `dump` | Save raw data for offline use | `scan` or `load` |
 | `regions` | List enabled AWS regions | `scan` or `load` |
 
@@ -119,7 +119,7 @@ Add to `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
 - **Error handling** — every tool returns structured errors with actionable guidance
 - **Workflow guidance** — tool responses tell the agent what to call next
 - **Offline mode** — load from dumps without AWS credentials
-- **65+ AWS services** — EC2, Lambda, S3, RDS, ECS, EKS, DynamoDB, and many more
+- **81 AWS services** — EC2, Lambda, S3, RDS, ECS, EKS, DynamoDB, and many more
 
 ## Log Level
 
