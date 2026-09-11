@@ -1,6 +1,6 @@
 {
   "name": "@gnaws/mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "GNAWS MCP server — expose AWS resource scanning and unused resource detection to AI agents",
   "license": "AGPL-3.0-only",
   "keywords": [
